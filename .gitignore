@@ -1,0 +1,10 @@
+sql
+_ReSharper.*
+*.user
+*.suo
+bin
+obj
+*.dbmdl
+*.schemaview
+*.log
+*.log.*

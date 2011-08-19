@@ -40,8 +40,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\CreateTask.cs" />
+    <Compile Include="Commands\ICommand.cs" />
+    <Compile Include="Commands\TaskCommandHandlers.cs" />
+    <Compile Include="Domain\AggregateRoot.cs" />
+    <Compile Include="Domain\IRepository.cs" />
+    <Compile Include="Domain\Repository.cs" />
+    <Compile Include="Domain\Task.cs" />
+    <Compile Include="Events\IEvent.cs" />
+    <Compile Include="Events\TaskCreated.cs" />
+    <Compile Include="Infrastructure\PrivateReflectionDynamicObject.cs" />
+    <Compile Include="Messaging\EventStore.cs" />
+    <Compile Include="Messaging\FakeBus.cs" />
+    <Compile Include="Messaging\IEventStore.cs" />
+    <Compile Include="Messaging\IMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -49,12 +49,16 @@
     <Compile Include="Domain\Task.cs" />
     <Compile Include="Events\IEvent.cs" />
     <Compile Include="Events\TaskCreated.cs" />
+    <Compile Include="Infrastructure\Bootstrapper.cs" />
     <Compile Include="Infrastructure\PrivateReflectionDynamicObject.cs" />
+    <Compile Include="Infrastructure\ServiceLocator.cs" />
     <Compile Include="Messaging\EventStore.cs" />
     <Compile Include="Messaging\FakeBus.cs" />
     <Compile Include="Messaging\IEventStore.cs" />
     <Compile Include="Messaging\IMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModel\PersistentViewModel.cs" />
+    <Compile Include="ViewModel\TaskEventHandlers.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

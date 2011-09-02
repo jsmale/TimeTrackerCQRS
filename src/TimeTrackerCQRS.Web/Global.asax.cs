@@ -4,6 +4,10 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using TimeTrackerCQRS.Commands;
+using TimeTrackerCQRS.Domain;
+using TimeTrackerCQRS.Infrastructure;
+using TimeTrackerCQRS.Messaging;
 
 namespace TimeTrackerCQRS.Web
 {
@@ -35,6 +39,8 @@ namespace TimeTrackerCQRS.Web
 
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);
-        }
+
+            Bootstrapper.Bootstrap();
+        }        
     }
 }

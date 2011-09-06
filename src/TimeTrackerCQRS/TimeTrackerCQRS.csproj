@@ -58,7 +58,8 @@
     <Compile Include="Messaging\IMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModel\PersistentViewModel.cs" />
-    <Compile Include="ViewModel\TaskEventHandlers.cs" />
+    <Compile Include="ViewModel\TaskListItemDenormalizer.cs" />
+    <Compile Include="ViewModel\TaskListItem.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

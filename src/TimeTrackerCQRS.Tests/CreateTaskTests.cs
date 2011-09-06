@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TimeTrackerCQRS.Commands;
+using TimeTrackerCQRS.Domain;
 using TimeTrackerCQRS.Events;
 
 namespace TimeTrackerCQRS.Tests
@@ -9,7 +10,10 @@ namespace TimeTrackerCQRS.Tests
     [TestClass]
     public class CreateTaskTests : CommandSpecification<TaskCommandHandlers, CreateTask>
     {
-        private CreateTask command;
+        protected override TaskCommandHandlers CreateHandler(IRepository repository)
+        {
+            return new TaskCommandHandlers(repository);
+        }
 
         protected override IEnumerable<IEvent> Given()
         {
@@ -18,14 +22,18 @@ namespace TimeTrackerCQRS.Tests
 
         protected override CreateTask When()
         {
-            command = new CreateTask(Guid.NewGuid());
-            return command;
+            return new CreateTask
+            {
+                Id = Guid.NewGuid(),
+                Task = "Task",
+                Project = "Project"
+            };
         }
 
         [TestMethod]
         public void ShouldPublishTaskCreated()
         {
-            AssertEventOccured(new TaskCreated(command.Id));
+            AssertEventOccured(new TaskCreated(command.Id, command.Task, command.Project));
         }
     }
 }

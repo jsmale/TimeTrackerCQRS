@@ -19,16 +19,18 @@ namespace TimeTrackerCQRS.Tests
         private THandler handler;
         protected Exception exception;
         private static readonly CompareObjects comparer = new CompareObjects();
+        protected TCommand command;
 
         [TestInitialize]
         public void Init()
         {
             eventStore = new TestEventStore(Given());
-            handler = CreateHandler<THandler>(new Repository(eventStore));
+            handler = CreateHandler(new Repository(eventStore));
             exception = null;
             try
             {
-                handler.Handle(When());
+                command = When();
+                handler.Handle(command);
             }
             catch(Exception ex)
             {
@@ -36,10 +38,7 @@ namespace TimeTrackerCQRS.Tests
             }
         }
 
-        private T CreateHandler<T>(IRepository repository)
-        {
-            return (T)typeof(THandler).GetConstructors()[0].Invoke(new object[] {repository});
-        }
+        protected abstract THandler CreateHandler(IRepository repository);
 
         protected void AssertEventOccured(IEvent @event)
         {

@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using System.Web.Routing;
-using TimeTrackerCQRS.Commands;
-using TimeTrackerCQRS.Domain;
 using TimeTrackerCQRS.Infrastructure;
-using TimeTrackerCQRS.Messaging;
 
 namespace TimeTrackerCQRS.Web
 {
@@ -28,7 +21,7 @@ namespace TimeTrackerCQRS.Web
             routes.MapRoute(
                 "Default", // Route name
                 "{controller}/{action}/{id}", // URL with parameters
-                new { controller = "Home", action = "Index", id = UrlParameter.Optional } // Parameter defaults
+                new { controller = "Task", action = "Index", id = UrlParameter.Optional } // Parameter defaults
             );
 
         }
@@ -41,6 +34,6 @@ namespace TimeTrackerCQRS.Web
             RegisterRoutes(RouteTable.Routes);
 
             Bootstrapper.Bootstrap();
-        }        
+        }
     }
 }

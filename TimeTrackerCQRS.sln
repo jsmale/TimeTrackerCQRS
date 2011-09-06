@@ -5,7 +5,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeTrackerCQRS", "src\Time
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeTrackerCQRS.Tests", "src\TimeTrackerCQRS.Tests\TimeTrackerCQRS.Tests.csproj", "{FF4CBBD3-6EE2-49CC-8260-AB5CD4F71DF2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeTrackerCQRS.Web", "src\TimeTrackerCQRS.Web\TimeTrackerCQRS.Web.csproj", "{3B392734-0017-4F9E-962A-653D2F8702A4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeTrackerCQRS.Web", "src\TimeTrackerCQRS.Web\TimeTrackerCQRS.Web.csproj", "{137C8F40-710F-4F32-8B5C-79E38E19E442}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,10 +21,10 @@ Global
 		{FF4CBBD3-6EE2-49CC-8260-AB5CD4F71DF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FF4CBBD3-6EE2-49CC-8260-AB5CD4F71DF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FF4CBBD3-6EE2-49CC-8260-AB5CD4F71DF2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3B392734-0017-4F9E-962A-653D2F8702A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3B392734-0017-4F9E-962A-653D2F8702A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3B392734-0017-4F9E-962A-653D2F8702A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3B392734-0017-4F9E-962A-653D2F8702A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{137C8F40-710F-4F32-8B5C-79E38E19E442}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{137C8F40-710F-4F32-8B5C-79E38E19E442}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{137C8F40-710F-4F32-8B5C-79E38E19E442}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{137C8F40-710F-4F32-8B5C-79E38E19E442}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

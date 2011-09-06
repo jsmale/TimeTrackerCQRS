@@ -11,9 +11,9 @@ namespace TimeTrackerCQRS.Domain
         {
         }
 
-        public Task(Guid id)
+        public Task(Guid id, string task, string project)
         {
-            ApplyChange(new TaskCreated(id));
+            ApplyChange(new TaskCreated(id, task, project));
         }
 
         public override Guid Id

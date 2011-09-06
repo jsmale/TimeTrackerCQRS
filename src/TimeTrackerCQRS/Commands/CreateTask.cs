@@ -4,9 +4,7 @@ namespace TimeTrackerCQRS.Commands
 {
     public class CreateTask : Command
     {
-        public CreateTask(Guid id)
-        {
-            Id = id;
-        }
+        public string Task { get; set; }
+        public string Project { get; set; }
     }
 }

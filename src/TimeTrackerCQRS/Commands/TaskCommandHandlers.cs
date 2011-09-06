@@ -14,7 +14,7 @@ namespace TimeTrackerCQRS.Commands
 
         public void Handle(CreateTask message)
         {
-            var task = new Task(message.Id);
+            var task = new Task(message.Id, message.Task, message.Project);
             repository.Save(task, 0);
         }
     }

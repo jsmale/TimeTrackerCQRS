@@ -17,7 +17,7 @@ namespace TimeTrackerCQRS.Infrastructure
             bus.RegisterHandler<CreateTask>(taskCommandHandlers.Handle);
 
             var persistentViewModel = new PersistentViewModel();
-            var taskEventHandlers = new TaskEventHandlers(persistentViewModel);
+            var taskEventHandlers = new TaskListItemDenormalizer(persistentViewModel);
             bus.RegisterHandler<TaskCreated>(taskEventHandlers.Handle);
 
             ServiceLocator.CommandSender = bus;

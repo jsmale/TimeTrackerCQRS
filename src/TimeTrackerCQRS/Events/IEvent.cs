@@ -9,7 +9,7 @@ namespace TimeTrackerCQRS.Events
     }
     public class Event : IEvent
     {
-        public Guid Id { get; protected set; }
+        public Guid Id { get; set; }
         public int Version { get; set; }
     }
 }

@@ -1,14 +1,8 @@
-﻿using System;
-using TimeTrackerCQRS.Messaging;
+﻿using TimeTrackerCQRS.Messaging;
 
 namespace TimeTrackerCQRS.Commands
 {
     public interface ICommand : IMessage
-    {
-         
-    }
-    public class Command : ICommand
-    {
-        public Guid Id { get; set; }
+    {         
     }
 }

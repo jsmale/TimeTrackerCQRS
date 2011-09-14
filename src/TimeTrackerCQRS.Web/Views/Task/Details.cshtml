@@ -1,0 +1,23 @@
+﻿@model TimeTrackerCQRS.ViewModel.TaskDetail
+@using TimeTrackerCQRS.Commands;
+
+@{
+    ViewBag.Title = "Task Detail";
+}
+
+<h2>@Model.Task</h2>
+<h3>Project: @Model.Project</h3>
+
+@if (Model.Started)
+{
+    <div>Last Started: @Model.StartTime</div>
+    Html.RenderPartial("Stop", new StopTask { CommandId = Model.Id, OriginalVersion = Model.Version, Comment = Model.LastNote });
+}
+else
+{
+    Html.RenderPartial("Start", new StartTask { CommandId = Model.Id, OriginalVersion = Model.Version });
+}
+
+<p>
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -6,8 +6,9 @@ namespace TimeTrackerCQRS.Messaging
 {
     public interface IEventStore
     {
-        void SaveEvents(Guid aggregateId, IEnumerable<IEvent> events, int expectedVersion);
-        List<IEvent> GetEventsForAggregate(Guid aggregateId);
+        void SaveEvents(Guid aggregateId, IEnumerable<Event> events, int expectedVersion);
+        List<Event> GetEventsForAggregate(Guid aggregateId);
+        IEnumerable<Event> GetAllEvents();
     }
 
     public class AggregateNotFoundException : Exception

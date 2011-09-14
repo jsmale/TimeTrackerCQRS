@@ -7,12 +7,12 @@ namespace TimeTrackerCQRS.Domain
 {
     public abstract class AggregateRoot
     {
-        private readonly List<IEvent> _changes = new List<IEvent>();
+        private readonly List<Event> _changes = new List<Event>();
 
         public abstract Guid Id { get; }
         public int Version { get; internal set; }
 
-        public IEnumerable<IEvent> GetUncommittedChanges()
+        public IEnumerable<Event> GetUncommittedChanges()
         {
             return _changes;
         }
@@ -22,17 +22,17 @@ namespace TimeTrackerCQRS.Domain
             _changes.Clear();
         }
 
-        public void LoadsFromHistory(IEnumerable<IEvent> history)
+        public void LoadsFromHistory(IEnumerable<Event> history)
         {
             foreach (var e in history) ApplyChange(e, false);
         }
 
-        protected void ApplyChange(IEvent @event)
+        protected void ApplyChange(Event @event)
         {
             ApplyChange(@event, true);
         }
 
-        private void ApplyChange(IEvent @event, bool isNew)
+        private void ApplyChange(Event @event, bool isNew)
         {
             this.AsDynamic().Apply(@event);
             if (isNew) _changes.Add(@event);

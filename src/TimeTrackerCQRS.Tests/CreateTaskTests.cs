@@ -15,9 +15,9 @@ namespace TimeTrackerCQRS.Tests
             return new TaskCommandHandlers(repository);
         }
 
-        protected override IEnumerable<IEvent> Given()
+        protected override IEnumerable<Event> Given()
         {
-            return new IEvent[] {};
+            return new Event[] {};
         }
 
         protected override CreateTask When()

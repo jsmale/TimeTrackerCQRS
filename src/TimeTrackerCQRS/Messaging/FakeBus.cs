@@ -36,15 +36,24 @@ namespace TimeTrackerCQRS.Messaging
             }
         }
 
-        public void Publish<T>(T @event) where T : IEvent
+        public void Publish<T>(T @event) where T : Event
         {
             List<Action<IMessage>> handlers;
             if (!_routes.TryGetValue(@event.GetType(), out handlers)) return;
             foreach (var handler in handlers)
             {
+                handler(@event);
                 //dispatch on thread pool for added awesomeness
-                var handler1 = handler;
-                ThreadPool.QueueUserWorkItem(x => handler1(@event));
+//                var handler1 = handler;
+//                ThreadPool.QueueUserWorkItem(x => handler1(@event));
+            }
+        }
+
+        public void Publish<T>(IEnumerable<T> events) where T : Event
+        {
+            foreach (var @event in events)
+            {
+                Publish(@event);
             }
         }
     }
@@ -61,6 +70,7 @@ namespace TimeTrackerCQRS.Messaging
     }
     public interface IEventPublisher
     {
-        void Publish<T>(T @event) where T : IEvent;
+        void Publish<T>(T @event) where T : Event;
+        void Publish<T>(IEnumerable<T> events) where T : Event;
     }
 }

@@ -40,35 +40,40 @@ namespace TimeTrackerCQRS.Tests
 
         protected abstract THandler CreateHandler(IRepository repository);
 
-        protected void AssertEventOccured(IEvent @event)
+        protected void AssertEventOccured(Event @event)
         {
             Assert.IsTrue(eventStore.SavedEvents.Any(x => comparer.Compare(x, @event)), "Event not found");
         }
 
-        protected abstract IEnumerable<IEvent> Given();
+        protected abstract IEnumerable<Event> Given();
         protected abstract TCommand When();
 
         class TestEventStore : IEventStore
         {
-            private readonly List<IEvent> eventHistory;
-            private IList<IEvent> savedEvents;
+            private readonly List<Event> eventHistory;
+            private IList<Event> savedEvents;
             
-            public TestEventStore(IEnumerable<IEvent> eventHistory)
+            public TestEventStore(IEnumerable<Event> eventHistory)
             {
-                this.eventHistory = new List<IEvent>(eventHistory);
+                this.eventHistory = new List<Event>(eventHistory);
             }
 
-            public IEnumerable<IEvent> SavedEvents
+            public IEnumerable<Event> SavedEvents
             {
                 get { return savedEvents.AsEnumerable(); }
             }
 
-            public void SaveEvents(Guid aggregateId, IEnumerable<IEvent> events, int expectedVersion)
+            public void SaveEvents(Guid aggregateId, IEnumerable<Event> events, int expectedVersion)
             {
-                savedEvents = new List<IEvent>(events);
+                savedEvents = new List<Event>(events);
             }
 
-            public List<IEvent> GetEventsForAggregate(Guid aggregateId)
+            public List<Event> GetEventsForAggregate(Guid aggregateId)
+            {
+                return eventHistory;
+            }
+
+            public IEnumerable<Event> GetAllEvents()
             {
                 return eventHistory;
             }

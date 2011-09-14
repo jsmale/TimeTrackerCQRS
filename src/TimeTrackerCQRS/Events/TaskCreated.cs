@@ -4,14 +4,20 @@ namespace TimeTrackerCQRS.Events
 {
     public class TaskCreated : Event
     {
-        private readonly string task;
-        private readonly string project;
+        readonly Guid id;
+        readonly string task;
+        readonly string project;
 
         public TaskCreated(Guid id, string task, string project)
         {
+            this.id = id;
             this.task = task;
             this.project = project;
-            Id = id;
+        }
+
+        public Guid Id
+        {
+            get { return id; }
         }
 
         public string Task

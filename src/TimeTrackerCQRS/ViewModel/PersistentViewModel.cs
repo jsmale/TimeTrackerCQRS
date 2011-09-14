@@ -4,13 +4,6 @@ using System.Linq;
 
 namespace TimeTrackerCQRS.ViewModel
 {
-    public interface IPersistentViewModel
-    {
-        void Insert<T>(T viewModel);
-        IEnumerable<T> Query<T>();
-        void Delete<T>(T viewModel);
-    }
-
     public class PersistentViewModel : IPersistentViewModel
     {
         private readonly IDictionary<Type, List<object>> data;
@@ -45,6 +38,14 @@ namespace TimeTrackerCQRS.ViewModel
         public void Delete<T>(T viewModel)
         {
             GetTable<T>().Remove(viewModel);
+        }
+
+        public void SaveChanges()
+        {            
+        }
+
+        public void Dispose()
+        {            
         }
     }
 }

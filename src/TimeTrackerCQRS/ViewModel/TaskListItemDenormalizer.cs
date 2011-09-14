@@ -1,15 +1,17 @@
-﻿using TimeTrackerCQRS.Events;
+﻿using System;
+using System.Linq;
+using TimeTrackerCQRS.Events;
 using TimeTrackerCQRS.Messaging;
 
 namespace TimeTrackerCQRS.ViewModel
 {
-    public class TaskListItemDenormalizer : IHandles<TaskCreated>
+    public class TaskListItemDenormalizer : IHandles<TaskCreated>, IHandles<TaskStarted>
     {
-        private readonly IPersistentViewModel persistentViewModel;
+        private readonly IPersistentViewModelFactory persistentViewModelFactory;
 
-        public TaskListItemDenormalizer(IPersistentViewModel persistentViewModel)
+        public TaskListItemDenormalizer(IPersistentViewModelFactory persistentViewModelFactory)
         {
-            this.persistentViewModel = persistentViewModel;
+            this.persistentViewModelFactory = persistentViewModelFactory;
         }
 
         public void Handle(TaskCreated message)
@@ -20,7 +22,26 @@ namespace TimeTrackerCQRS.ViewModel
                 Task = message.Task,
                 Project = message.Project
             };
-            persistentViewModel.Insert(taskListItem);
+            using (var viewModel = persistentViewModelFactory.GetPersitentViewModel())
+            {
+                viewModel.Insert(taskListItem);
+                viewModel.SaveChanges();
+            }
+        }
+
+        public void Handle(TaskStarted message)
+        {
+            using (var viewModel = persistentViewModelFactory.GetPersitentViewModel())
+            {
+                var item = GetListItem(message.TaskId, viewModel);
+                item.LastStartTime = message.StartTime;
+                viewModel.SaveChanges();
+            }
+        }
+
+        TaskListItem GetListItem(Guid id, IPersistentViewModel viewModel)
+        {
+            return viewModel.Query<TaskListItem>().Single(x => x.Id == id);
         }
     }
 }

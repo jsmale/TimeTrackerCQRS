@@ -12,11 +12,11 @@ namespace TimeTrackerCQRS.Messaging
         private struct EventDescriptor
         {
 
-            public readonly IEvent EventData;
+            public readonly Event EventData;
             public readonly Guid Id;
             public readonly int Version;
 
-            public EventDescriptor(Guid id, IEvent eventData, int version)
+            public EventDescriptor(Guid id, Event eventData, int version)
             {
                 EventData = eventData;
                 Version = version;
@@ -31,7 +31,7 @@ namespace TimeTrackerCQRS.Messaging
 
         private readonly Dictionary<Guid, List<EventDescriptor>> _current = new Dictionary<Guid, List<EventDescriptor>>();
 
-        public void SaveEvents(Guid aggregateId, IEnumerable<IEvent> events, int expectedVersion)
+        public void SaveEvents(Guid aggregateId, IEnumerable<Event> events, int expectedVersion)
         {
             List<EventDescriptor> eventDescriptors;
             if (!_current.TryGetValue(aggregateId, out eventDescriptors))
@@ -53,7 +53,7 @@ namespace TimeTrackerCQRS.Messaging
             }
         }
 
-        public List<IEvent> GetEventsForAggregate(Guid aggregateId)
+        public List<Event> GetEventsForAggregate(Guid aggregateId)
         {
             List<EventDescriptor> eventDescriptors;
             if (!_current.TryGetValue(aggregateId, out eventDescriptors))
@@ -61,6 +61,14 @@ namespace TimeTrackerCQRS.Messaging
                 throw new AggregateNotFoundException();
             }
             return eventDescriptors.Select(desc => desc.EventData).ToList();
+        }
+
+        public IEnumerable<Event> GetAllEvents()
+        {
+            return from eventDescriptors in _current.Values 
+                   from eventDescriptor in eventDescriptors
+                   orderby eventDescriptor.Id, eventDescriptor.Version
+                   select eventDescriptor.EventData;
         }
     }
 }

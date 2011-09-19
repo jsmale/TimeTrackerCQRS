@@ -2,16 +2,25 @@
 using System.Linq;
 using System.Web.Mvc;
 using TimeTrackerCQRS.Commands;
-using TimeTrackerCQRS.Infrastructure;
+using TimeTrackerCQRS.Messaging;
 using TimeTrackerCQRS.ViewModel;
 
 namespace TimeTrackerCQRS.Web.Controllers
 {
     public class TaskController : Controller
     {
-        public ActionResult Index(int skip = 0, int take = 10)
+    	readonly IPersistentViewModelFactory viewModelFactory;
+    	readonly ICommandSender commandSender;
+
+    	public TaskController(IPersistentViewModelFactory viewModelFactory, ICommandSender commandSender)
+    	{
+    		this.viewModelFactory = viewModelFactory;
+    		this.commandSender = commandSender;
+    	}
+
+    	public ActionResult Index(int skip = 0, int take = 10)
         {
-            using (var viewModel = ServiceLocator.PersistentViewModelFactory.GetPersitentViewModel())
+			using (var viewModel = viewModelFactory.GetPersitentViewModel())
             {
                 var query = from t in viewModel.Query<TaskListItem>()
                             orderby t.LastStartTime descending
@@ -28,13 +37,13 @@ namespace TimeTrackerCQRS.Web.Controllers
         [HttpPost]
         public ActionResult Create(CreateTask createTask)
         {
-            ServiceLocator.CommandSender.Send(createTask);
+            commandSender.Send(createTask);
             return RedirectToAction("Details", new {id = createTask.Id});
         }
 
         public ActionResult Details(Guid id)
         {
-            using (var viewModel = ServiceLocator.PersistentViewModelFactory.GetPersitentViewModel())
+			using (var viewModel = viewModelFactory.GetPersitentViewModel())
             {
                 var taskDetail = (from t in viewModel.Query<TaskDetail>()
                                   where t.Id == id
@@ -46,14 +55,14 @@ namespace TimeTrackerCQRS.Web.Controllers
         [HttpPost]
         public ActionResult Start(StartTask startTask)
         {
-            ServiceLocator.CommandSender.Send(startTask);
+            commandSender.Send(startTask);
             return RedirectToAction("Details", new {id = startTask.CommandId});
         }
 
         [HttpPost]
         public ActionResult Stop(StopTask stopTask)
         {
-            ServiceLocator.CommandSender.Send(stopTask);
+            commandSender.Send(stopTask);
             return RedirectToAction("Details", new { id = stopTask.CommandId });
         }  
     }

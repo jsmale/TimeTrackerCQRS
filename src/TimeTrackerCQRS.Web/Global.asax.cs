@@ -1,6 +1,10 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Collections.Generic;
+using System.Web.Mvc;
 using System.Web.Routing;
+using StructureMap;
 using TimeTrackerCQRS.Infrastructure;
+using System.Linq;
 
 namespace TimeTrackerCQRS.Web
 {
@@ -33,7 +37,46 @@ namespace TimeTrackerCQRS.Web
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);
 
-            Bootstrapper.Bootstrap();
+            var container = Bootstrapper.InitializeContainer();
+			container.Configure(x => x.For<IControllerFactory>().Use<ContainerControllerFactory>());
+			DependencyResolver.SetResolver(new ContainerDependencyResolver(container));
         }
     }
+
+	public class ContainerControllerFactory : DefaultControllerFactory
+	{
+		readonly IContainer container;
+
+		public ContainerControllerFactory(IContainer container)
+		{
+			this.container = container;
+		}
+
+		protected override IController GetControllerInstance(RequestContext requestContext, Type controllerType)
+		{
+			if (controllerType == null) return null;
+
+			return (IController)container.GetInstance(controllerType);
+		}
+	}
+
+	public class ContainerDependencyResolver : IDependencyResolver
+	{
+		readonly IContainer container;
+
+		public ContainerDependencyResolver(IContainer container)
+		{
+			this.container = container;
+		}
+
+		public object GetService(Type serviceType)
+		{
+			return container.TryGetInstance(serviceType);
+		}
+
+		public IEnumerable<object> GetServices(Type serviceType)
+		{
+			return container.GetAllInstances(serviceType).Cast<object>();
+		}
+	}
 }

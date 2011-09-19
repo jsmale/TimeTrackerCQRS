@@ -1,34 +1,37 @@
 using System;
 using System.Collections.Generic;
-using System.Threading;
 using TimeTrackerCQRS.Commands;
 using TimeTrackerCQRS.Events;
-using TimeTrackerCQRS.Infrastructure;
 
 namespace TimeTrackerCQRS.Messaging
 {
-    public class FakeBus : ICommandSender, IEventPublisher
+    public class FakeBus : IBus
     {
-        private readonly Dictionary<Type, List<Action<IMessage>>> _routes = new Dictionary<Type, List<Action<IMessage>>>();
+		private readonly Dictionary<Type, List<Action<object>>> _routes = new Dictionary<Type, List<Action<object>>>();
 
-        public void RegisterHandler<T>(Action<T> handler) where T : IMessage
-        {
-            List<Action<IMessage>> handlers;
-            if (!_routes.TryGetValue(typeof(T), out handlers))
-            {
-                handlers = new List<Action<IMessage>>();
-                _routes.Add(typeof(T), handlers);
-            }
-            handlers.Add(DelegateAdjuster.CastArgument<IMessage, T>(x => handler(x)));
-        }
+		public void RegisterHandler<T>(Action<T> handler) where T : IMessage
+		{
+			RegisterHandler(x => handler((T) x), typeof (T));
+		}
 
-        public void Send<T>(T command) where T : ICommand
+    	public void RegisterHandler(Action<object> handler, Type type)
+		{
+			List<Action<object>> handlers;
+			if (!_routes.TryGetValue(type, out handlers))
+			{
+				handlers = new List<Action<object>>();
+				_routes.Add(type, handlers);
+			}
+			handlers.Add(handler);
+    	}
+
+    	public void Send<T>(T command) where T : ICommand
         {
-            List<Action<IMessage>> handlers;
+            List<Action<object>> handlers;
             if (_routes.TryGetValue(typeof(T), out handlers))
             {
                 if (handlers.Count != 1) throw new InvalidOperationException("cannot send to more than one handler");
-                handlers[0](command);
+				handlers[0](command);
             }
             else
             {
@@ -38,14 +41,14 @@ namespace TimeTrackerCQRS.Messaging
 
         public void Publish<T>(T @event) where T : Event
         {
-            List<Action<IMessage>> handlers;
+            List<Action<object>> handlers;
             if (!_routes.TryGetValue(@event.GetType(), out handlers)) return;
             foreach (var handler in handlers)
             {
-                handler(@event);
+            	handler(@event);
                 //dispatch on thread pool for added awesomeness
-//                var handler1 = handler;
-//                ThreadPool.QueueUserWorkItem(x => handler1(@event));
+//				var handler1 = handler;
+//				(new Task(() => handler1(@event))).Start();
             }
         }
 
@@ -73,4 +76,9 @@ namespace TimeTrackerCQRS.Messaging
         void Publish<T>(T @event) where T : Event;
         void Publish<T>(IEnumerable<T> events) where T : Event;
     }
+	public interface IBus : ICommandSender, IEventPublisher
+	{
+		void RegisterHandler<T>(Action<T> handler) where T : IMessage;
+		void RegisterHandler(Action<object> handler, Type type);
+	}
 }

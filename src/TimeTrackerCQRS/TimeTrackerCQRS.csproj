@@ -88,6 +88,9 @@
     <Reference Include="SpellChecker.Net">
       <HintPath>..\..\packages\RavenDB-Embedded.1.0.0.465\lib\net40\SpellChecker.Net.dll</HintPath>
     </Reference>
+    <Reference Include="StructureMap">
+      <HintPath>..\..\packages\structuremap.2.6.3\lib\StructureMap.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -115,7 +118,6 @@
     <Compile Include="Infrastructure\Bootstrapper.cs" />
     <Compile Include="Infrastructure\IDateTimeService.cs" />
     <Compile Include="Infrastructure\PrivateReflectionDynamicObject.cs" />
-    <Compile Include="Infrastructure\ServiceLocator.cs" />
     <Compile Include="Messaging\EventStore.cs" />
     <Compile Include="Messaging\FakeBus.cs" />
     <Compile Include="Messaging\IEventStore.cs" />

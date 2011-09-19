@@ -4,15 +4,18 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TimeTrackerCQRS.Commands;
 using TimeTrackerCQRS.Domain;
 using TimeTrackerCQRS.Events;
+using TimeTrackerCQRS.Infrastructure;
 
 namespace TimeTrackerCQRS.Tests
 {
     [TestClass]
     public class CreateTaskTests : CommandSpecification<TaskCommandHandlers, CreateTask>
     {
+    	IDateTimeService dateTimeService;
+
         protected override TaskCommandHandlers CreateHandler(IRepository repository)
         {
-            return new TaskCommandHandlers(repository);
+			return new TaskCommandHandlers(repository, dateTimeService);
         }
 
         protected override IEnumerable<Event> Given()

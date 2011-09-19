@@ -1,5 +1,6 @@
 ﻿using System;
 using TimeTrackerCQRS.Events;
+using TimeTrackerCQRS.Infrastructure;
 
 namespace TimeTrackerCQRS.Domain
 {
@@ -27,13 +28,13 @@ namespace TimeTrackerCQRS.Domain
             id = e.Id;
         }
 
-        public void Start(DateTime? startTime, string comment)
+        public void Start(DateTime? startTime, string comment, IDateTimeService dateTimeService)
         {
             if (lastStartTime.HasValue)
             {
                 throw new InvalidOperationException("Task already started");
             }
-            ApplyChange(new TaskStarted(id, startTime, comment));
+			ApplyChange(new TaskStarted(id, startTime.GetValueOrDefault(dateTimeService.GetUtcNow()), comment));
         }
 
         private void Apply(TaskStarted e)
@@ -41,13 +42,13 @@ namespace TimeTrackerCQRS.Domain
             lastStartTime = e.StartTime;            
         }
 
-        public void Stop(DateTime? stopTime, string comment)
+		public void Stop(DateTime? stopTime, string comment, IDateTimeService dateTimeService)
         {
             if (lastStartTime == null)
             {
                 throw new InvalidOperationException("Task already stopped");
             }
-            ApplyChange(new TaskStopped(id, stopTime, comment));
+			ApplyChange(new TaskStopped(id, stopTime.GetValueOrDefault(dateTimeService.GetUtcNow()), comment));
         }
 
         private void Apply(TaskStopped e)

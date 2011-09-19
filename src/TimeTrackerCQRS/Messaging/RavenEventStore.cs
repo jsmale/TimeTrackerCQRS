@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using EventStore;
 using EventStore.Dispatcher;
-using EventStore.Serialization;
-using Raven.Client;
-using Raven.Client.Embedded;
 using TimeTrackerCQRS.Events;
 using System.Linq;
 
@@ -12,24 +9,14 @@ namespace TimeTrackerCQRS.Messaging
 {
     public class RavenEventStore : IEventStore
     {
-        static IStoreEvents store;
+    	readonly IStoreEvents store;
 
         public RavenEventStore(IEventPublisher publisher)
         {
-            InitStore(publisher);
-        }
-
-        public static IStoreEvents Store
-        {
-            get { return store; }
-        }
-        public static void InitStore(IEventPublisher publisher)
-        {
-            if (store != null) return;
-            store = Wireup.Init()
-                .UsingMyRavenPersistence()
-                .UsingAsynchronousDispatcher(new DelegateMessagePublisher(x => publisher.Publish(x.Events.Select(y => (Event)y.Body))))
-                .Build();
+			store = Wireup.Init()
+				.UsingMyRavenPersistence()
+				.UsingAsynchronousDispatcher(new DelegateMessagePublisher(x => publisher.Publish(x.Events.Select(y => (Event)y.Body))))
+				.Build();
         }
 
         public void SaveEvents(Guid aggregateId, IEnumerable<Event> events, int expectedVersion)

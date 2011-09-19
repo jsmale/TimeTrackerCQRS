@@ -6,13 +6,13 @@ namespace TimeTrackerCQRS.Events
     public class TaskStarted : Event
     {
         readonly Guid taskId;
-        readonly DateTime? startTime;
+        readonly DateTime startTime;
         readonly string comment;
 
-        public TaskStarted(Guid taskId, DateTime? startTime, string comment)
+        public TaskStarted(Guid taskId, DateTime startTime, string comment)
         {
             this.taskId = taskId;
-            this.startTime = startTime.GetValueOrDefault(ServiceLocator.DateTimeService.GetUtcNow());
+            this.startTime = startTime;
             this.comment = comment;
         }
 

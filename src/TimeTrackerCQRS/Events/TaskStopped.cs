@@ -6,13 +6,13 @@ namespace TimeTrackerCQRS.Events
     public class TaskStopped : Event
     {
         readonly Guid taskId;
-        readonly DateTime? stopTime;
+        readonly DateTime stopTime;
         readonly string comment;
 
-        public TaskStopped(Guid taskId, DateTime? stopTime, string comment)
+        public TaskStopped(Guid taskId, DateTime stopTime, string comment)
         {
             this.taskId = taskId;
-            this.stopTime = stopTime.GetValueOrDefault(ServiceLocator.DateTimeService.GetUtcNow());
+            this.stopTime = stopTime;
             this.comment = comment;
         }
 
